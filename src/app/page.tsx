@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { relojesDestacados, marcasPopulares } from "@/lib/data";
+import { relojesDestacados } from "@/lib/data";
 import RelojCard from "@/components/RelojCard";
-import MovimientosSection from "@/components/MovimientoReloj";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
@@ -34,9 +33,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3 Movimientos animados ── */}
-      <MovimientosSection />
-
       {/* ── Redes sociales ── */}
       <section className="bg-[#0a0a0a] border-y border-[#C9A84C]/20 py-8 px-4">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
@@ -62,27 +58,6 @@ export default function Home() {
               {icon}{label}
             </a>
           ))}
-        </div>
-      </section>
-
-      {/* ── Marcas ── */}
-      <section className="py-16 px-4 bg-[#0d0d0d]">
-        <div className="max-w-7xl mx-auto">
-          <ScrollReveal>
-            <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-[#C9A84C] mb-8">
-              Marcas más buscadas
-            </h2>
-          </ScrollReveal>
-          <div className="flex flex-wrap justify-center gap-3">
-            {marcasPopulares.map((marca, i) => (
-              <ScrollReveal key={marca} delay={((i % 6) * 100) as 0|100|200|300|400|500|600}>
-                <Link href={`/catalogo?marca=${encodeURIComponent(marca)}`}
-                  className="px-5 py-2.5 border border-stone-700 rounded-full text-sm font-medium text-stone-300 hover:border-[#C9A84C] hover:text-[#C9A84C] hover:scale-105 transition-all block">
-                  {marca}
-                </Link>
-              </ScrollReveal>
-            ))}
-          </div>
         </div>
       </section>
 

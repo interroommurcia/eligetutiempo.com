@@ -1,14 +1,12 @@
 import { getRelojesPublicados } from "@/lib/relojes";
+import { marcasPopulares } from "@/lib/data";
 import RelojCard from "@/components/RelojCard";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Catálogo de Relojes — EligeTuTiempo" };
 
-const MARCAS = [
-  "Rolex", "Omega", "Patek Philippe", "Audemars Piguet",
-  "IWC", "Cartier", "TAG Heuer", "Breitling", "Tudor", "Longines",
-];
+const MARCAS = marcasPopulares;
 const ESTADOS = ["Mint", "Very Good", "Good", "Fair"];
 
 export default async function CatalogoPage({
