@@ -12,8 +12,8 @@ export default function Home() {
             Compraventa y tasación de relojes de lujo
           </p>
           <h1 className="text-5xl sm:text-6xl font-bold mb-6 leading-tight">
-            El mercado de relojes<br />
-            <span className="text-amber-400">de confianza</span>
+            El mercado del tiempo<br />
+            <span className="text-amber-400">que vende confianza</span>
           </h1>
           <p className="text-stone-300 text-lg mb-10 max-w-2xl mx-auto">
             Compra relojes verificados, vende el tuyo al mejor precio o descubre cuánto vale tu reloj con nuestra tasación gratuita.
