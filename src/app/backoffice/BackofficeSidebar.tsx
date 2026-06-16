@@ -8,6 +8,7 @@ const nav = [
   { href: "/backoffice", label: "Dashboard", icon: "📊" },
   { href: "/backoffice/relojes", label: "Relojes", icon: "⌚" },
   { href: "/backoffice/tasaciones", label: "Tasaciones", icon: "📋" },
+  { href: "/backoffice/mercado", label: "Mercado", icon: "📈" },
 ];
 
 export default function BackofficeSidebar() {
