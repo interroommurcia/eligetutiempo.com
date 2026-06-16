@@ -61,6 +61,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Marcas ── */}
+      <section className="py-10 px-4 bg-[#0d0d0d]">
+        <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-3">
+          {["Seiko","Citizen","Hamilton","Orient","Longines","Tissot","Omega","Tudor","Certina"].map((marca) => (
+            <a key={marca} href={`/catalogo?marca=${encodeURIComponent(marca)}`}
+              className="px-5 py-2.5 border border-stone-700 rounded-full text-sm font-medium text-stone-300 hover:border-[#C9A84C] hover:text-[#C9A84C] hover:scale-105 transition-all">
+              {marca}
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* ── Relojes destacados ── */}
       <section className="py-16 px-4 bg-[#111111]">
         <div className="max-w-7xl mx-auto">

@@ -13,7 +13,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm leading-relaxed max-w-xs">
-              Especialistas en compraventa y tasación de relojes de lujo. Autenticidad garantizada en cada operación.
+              Especialistas en compraventa y valoración de relojes. Autenticidad garantizada en cada operación.
             </p>
           </div>
 
