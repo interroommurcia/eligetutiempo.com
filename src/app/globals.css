@@ -10,3 +10,45 @@
 body {
   font-family: var(--font-sans), Arial, sans-serif;
 }
+
+/* ── Watch movement animations ── */
+@keyframes spin-cw  { to { transform: rotate(360deg);  } }
+@keyframes spin-ccw { to { transform: rotate(-360deg); } }
+@keyframes balance-osc {
+  0%   { transform: rotate(-22deg); }
+  100% { transform: rotate(22deg);  }
+}
+@keyframes quartz-step {
+  0%, 94% { transform: rotate(0deg);   }
+  100%     { transform: rotate(6deg); }
+}
+@keyframes rotor-spin { to { transform: rotate(360deg); } }
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1),
+              transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Stagger delays ── */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+.delay-600 { transition-delay: 600ms; }
+
+/* ── 3D card tilt ── */
+.card-3d {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transform-style: preserve-3d;
+}
+.card-3d:hover {
+  box-shadow: 0 20px 60px rgba(201,168,76,0.15);
+}
