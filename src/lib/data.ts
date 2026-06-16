@@ -14,8 +14,8 @@ export type Reloj = {
 };
 
 export const marcasPopulares = [
-  "Rolex", "Omega", "Patek Philippe", "Audemars Piguet",
-  "IWC", "Cartier", "TAG Heuer", "Breitling", "Tudor", "Longines",
+  "Omega", "Hamilton", "Tudor", "Seiko", "Citizen",
+  "Orient", "Tissot", "Certina", "Longines",
 ];
 
 export const relojesDestacados: Reloj[] = [
