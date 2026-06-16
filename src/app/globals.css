@@ -2,6 +2,9 @@
 
 :root {
   --font-sans: var(--font-geist-sans);
+  --gold: #C9A84C;
+  --gold-light: #E2C36A;
+  --gold-dark: #A8872C;
 }
 
 body {

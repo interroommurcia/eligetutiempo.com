@@ -2,14 +2,14 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-stone-900 text-stone-300 mt-auto">
+    <footer className="bg-black border-t border-[#C9A84C]/20 text-stone-400 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-2xl">⌚</span>
               <span className="font-bold text-white text-xl">
-                elige<span className="text-amber-500">tu</span>tiempo
+                elige<span className="text-[#C9A84C]">tu</span>tiempo
               </span>
             </div>
             <p className="text-sm leading-relaxed max-w-xs">
@@ -22,7 +22,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/catalogo" className="hover:text-white transition-colors">Comprar relojes</Link></li>
               <li><Link href="/vender" className="hover:text-white transition-colors">Vender mi reloj</Link></li>
-              <li><Link href="/tasacion" className="hover:text-white transition-colors">Tasación gratuita</Link></li>
+              <li><Link href="/tasacion" className="hover:text-white transition-colors">Valoración gratuita</Link></li>
             </ul>
           </div>
 
@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-stone-700 mt-10 pt-6 text-xs text-stone-500 text-center">
+        <div className="border-t border-[#C9A84C]/20 mt-10 pt-6 text-xs text-stone-600 text-center">
           © {new Date().getFullYear()} eligetutiempo.com — Todos los derechos reservados
         </div>
       </div>
