@@ -7,7 +7,8 @@ import { createClient } from "@/lib/supabase/client";
 const nav = [
   { href: "/backoffice", label: "Dashboard", icon: "📊" },
   { href: "/backoffice/relojes", label: "Relojes", icon: "⌚" },
-  { href: "/backoffice/tasaciones", label: "Tasaciones", icon: "📋" },
+  { href: "/backoffice/tasaciones", label: "Valoraciones", icon: "📋" },
+  { href: "/backoffice/ventas", label: "Ventas", icon: "💶" },
   { href: "/backoffice/mercado", label: "Mercado", icon: "📈" },
 ];
 

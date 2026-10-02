@@ -9,10 +9,10 @@ function formatPrecio(n: number) {
 }
 
 const ESTADO_BADGE: Record<string, string> = {
-  Mint: "bg-emerald-50 text-emerald-700",
-  "Very Good": "bg-blue-50 text-blue-700",
-  Good: "bg-amber-50 text-amber-700",
-  Fair: "bg-stone-100 text-stone-600",
+  "Nuevo con etiquetas": "bg-emerald-50 text-emerald-700",
+  "Como nuevo": "bg-blue-50 text-blue-700",
+  "Muy buen estado": "bg-amber-50 text-amber-700",
+  "En condiciones aceptables": "bg-stone-100 text-stone-600",
 };
 
 export default async function RelojPage({ params }: { params: Promise<{ slug: string }> }) {

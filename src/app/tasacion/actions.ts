@@ -18,6 +18,7 @@ export async function enviarTasacion(formData: FormData) {
     caja: formData.get("caja") === "on",
     papeles: formData.get("papeles") === "on",
     notas: (formData.get("notas") as string) || null,
+    fotos_urls: JSON.parse((formData.get("fotos_urls") as string) || "[]"),
   });
 
   if (error) throw new Error("Error al enviar la solicitud");

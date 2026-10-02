@@ -5,10 +5,10 @@ import type { Reloj } from "@/lib/relojes";
 import { eliminarReloj, togglePublicado } from "./actions";
 
 const ESTADO_COLOR: Record<string, string> = {
-  Mint: "bg-emerald-100 text-emerald-700",
-  "Very Good": "bg-blue-100 text-blue-700",
-  Good: "bg-amber-100 text-amber-700",
-  Fair: "bg-stone-100 text-stone-600",
+  "Nuevo con etiquetas": "bg-emerald-100 text-emerald-700",
+  "Como nuevo": "bg-blue-100 text-blue-700",
+  "Muy buen estado": "bg-amber-100 text-amber-700",
+  "En condiciones aceptables": "bg-stone-100 text-stone-600",
 };
 
 function RowActions({ reloj }: { reloj: Reloj }) {

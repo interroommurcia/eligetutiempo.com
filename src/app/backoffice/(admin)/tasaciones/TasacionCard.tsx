@@ -16,6 +16,7 @@ type Tasacion = {
   caja: boolean;
   papeles: boolean;
   notas: string | null;
+  fotos_urls: string[] | null;
   estado: EstadoTasacion;
   nota_interna: string | null;
   oferta: number | null;
@@ -87,6 +88,20 @@ export default function TasacionCard({ t }: { t: Tasacion }) {
               <div className="col-span-2">
                 <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">Notas del cliente</p>
                 <p className="text-stone-600">{t.notas}</p>
+              </div>
+            )}
+            {t.fotos_urls && t.fotos_urls.length > 0 && (
+              <div className="col-span-2">
+                <p className="text-xs text-stone-400 uppercase tracking-wide mb-2">Fotos ({t.fotos_urls.length})</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {t.fotos_urls.map((url, i) => (
+                    <a key={i} href={url} target="_blank" rel="noopener noreferrer"
+                      className="aspect-square rounded-lg overflow-hidden bg-stone-100 block hover:opacity-80 transition-opacity">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={url} alt={`Foto ${i + 1}`} className="w-full h-full object-cover" />
+                    </a>
+                  ))}
+                </div>
               </div>
             )}
           </div>

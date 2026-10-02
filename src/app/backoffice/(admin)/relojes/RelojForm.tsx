@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import type { Reloj } from "@/lib/relojes";
 
-const ESTADOS = ["Mint", "Very Good", "Good", "Fair"] as const;
+const ESTADOS = ["Nuevo con etiquetas", "Como nuevo", "Muy buen estado", "En condiciones aceptables"] as const;
 const MARCAS = [
   "Rolex", "Omega", "Patek Philippe", "Audemars Piguet",
   "IWC", "Cartier", "TAG Heuer", "Breitling", "Tudor", "Longines",

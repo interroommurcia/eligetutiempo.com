@@ -6,7 +6,7 @@ export type Reloj = {
   modelo: string;
   referencia: string;
   año: number | null;
-  estado: "Mint" | "Very Good" | "Good" | "Fair";
+  estado: "Nuevo con etiquetas" | "Como nuevo" | "Muy buen estado" | "En condiciones aceptables";
   caja: boolean;
   papeles: boolean;
   factura: boolean;

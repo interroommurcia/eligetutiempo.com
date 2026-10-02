@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Catálogo de Relojes — EligeTuTiempo" };
 
 const MARCAS = marcasPopulares;
-const ESTADOS = ["Mint", "Very Good", "Good", "Fair"];
+const ESTADOS = ["Nuevo con etiquetas", "Como nuevo", "Muy buen estado", "En condiciones aceptables"];
 
 export default async function CatalogoPage({
   searchParams,
