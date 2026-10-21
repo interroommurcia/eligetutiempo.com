@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 
+export type EstadoVenta = "Disponible" | "Reservado" | "Vendido";
+
 export type Reloj = {
   id: string;
   marca: string;
@@ -7,6 +9,7 @@ export type Reloj = {
   referencia: string;
   año: number | null;
   estado: "Nuevo con etiquetas" | "Como nuevo" | "Muy buen estado" | "En condiciones aceptables";
+  estado_venta: EstadoVenta;
   caja: boolean;
   papeles: boolean;
   factura: boolean;

@@ -22,6 +22,7 @@ export default function Navbar() {
             <Link href="/catalogo" className="text-stone-300 hover:text-[#C9A84C] transition-colors">Catálogo</Link>
             <Link href="/tasacion" className="text-stone-300 hover:text-[#C9A84C] transition-colors">Valoración gratuita</Link>
             <Link href="/vender" className="text-stone-300 hover:text-[#C9A84C] transition-colors">Vender</Link>
+            <Link href="/blog" className="text-stone-300 hover:text-[#C9A84C] transition-colors">Blog</Link>
             <Link href="/sobre-nosotros" className="text-stone-300 hover:text-[#C9A84C] transition-colors">Nosotros</Link>
           </nav>
 
@@ -51,6 +52,7 @@ export default function Navbar() {
           <Link href="/catalogo" className="text-stone-300" onClick={() => setOpen(false)}>Catálogo</Link>
           <Link href="/tasacion" className="text-stone-300" onClick={() => setOpen(false)}>Valoración gratuita</Link>
           <Link href="/vender" className="text-stone-300" onClick={() => setOpen(false)}>Vender</Link>
+          <Link href="/blog" className="text-stone-300" onClick={() => setOpen(false)}>Blog</Link>
           <Link href="/sobre-nosotros" className="text-stone-300" onClick={() => setOpen(false)}>Nosotros</Link>
           <Link
             href="/tasacion"

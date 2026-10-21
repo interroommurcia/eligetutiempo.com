@@ -14,28 +14,48 @@ function slugify(text: string) {
 }
 
 function parseForm(formData: FormData) {
-  const marca = formData.get("marca") as string;
+  const marca = (formData.get("marca") as string).trim();
   const modelo = formData.get("modelo") as string;
   const referencia = formData.get("referencia") as string;
+  const estadoVentaRaw = (formData.get("estado_venta") as string) || "Disponible";
+  const estadoVenta = ["Disponible", "Reservado", "Vendido"].includes(estadoVentaRaw)
+    ? estadoVentaRaw
+    : "Disponible";
   return {
     marca,
     modelo,
     referencia,
     año: formData.get("año") ? Number(formData.get("año")) : null,
     estado: formData.get("estado") as string,
+    estado_venta: estadoVenta,
     caja: formData.get("caja") === "on",
     papeles: formData.get("papeles") === "on",
     factura: formData.get("factura") === "on",
     precio_coste: formData.get("precio_coste") ? Number(formData.get("precio_coste")) : null,
     precio_venta: Number(formData.get("precio_venta")),
     descripcion: (formData.get("descripcion") as string) || null,
-    imagenes: (formData.get("imagenes") as string)
+    imagenes: ((formData.get("imagenes") as string) || "")
       .split("\n")
       .map((u) => u.trim())
       .filter(Boolean),
     slug: slugify(`${marca}-${modelo}-${referencia}`),
     publicado: formData.get("publicado") === "on",
   };
+}
+
+export async function cambiarEstadoVenta(id: string, estado_venta: "Disponible" | "Reservado" | "Vendido") {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const { error } = await supabase
+    .from("relojes")
+    .update({ estado_venta, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) throw error;
+
+  revalidatePath("/backoffice/relojes");
+  revalidatePath("/catalogo");
 }
 
 export async function crearReloj(formData: FormData) {

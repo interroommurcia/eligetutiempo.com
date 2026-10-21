@@ -2,14 +2,11 @@
 
 import { useActionState } from "react";
 import type { Reloj } from "@/lib/relojes";
+import MarcaInput from "@/components/MarcaInput";
+import ImageUploader from "@/components/ImageUploader";
 
 const ESTADOS = ["Nuevo con etiquetas", "Como nuevo", "Muy buen estado", "En condiciones aceptables"] as const;
-const MARCAS = [
-  "Rolex", "Omega", "Patek Philippe", "Audemars Piguet",
-  "IWC", "Cartier", "TAG Heuer", "Breitling", "Tudor", "Longines",
-  "Seiko", "Casio", "Grand Seiko", "Jaeger-LeCoultre", "Vacheron Constantin",
-  "A. Lange & Söhne", "Panerai", "Zenith", "Hublot", "Richard Mille", "Otra",
-];
+const ESTADOS_VENTA = ["Disponible", "Reservado", "Vendido"] as const;
 
 type Props = {
   reloj?: Reloj;
@@ -45,10 +42,14 @@ export default function RelojForm({ reloj, action }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
             <label className="block text-xs font-medium text-stone-600 mb-1">Marca *</label>
-            <select name="marca" required defaultValue={reloj?.marca ?? ""} className={field}>
-              <option value="" disabled>Selecciona marca</option>
-              {MARCAS.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
+            <MarcaInput
+              name="marca"
+              required
+              defaultValue={reloj?.marca ?? ""}
+              className={field}
+              placeholder="Escribe la marca (ej. Rolex, Omega...)"
+            />
+            <p className="text-[11px] text-stone-400 mt-1">Puedes escribir una marca que no esté en la lista.</p>
           </div>
           <div>
             <label className="block text-xs font-medium text-stone-600 mb-1">Modelo *</label>
@@ -63,18 +64,40 @@ export default function RelojForm({ reloj, action }: Props) {
             <input name="año" type="number" min="1900" max="2030" defaultValue={reloj?.año ?? ""} className={field} placeholder="2021" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-stone-600 mb-1">Estado *</label>
+            <label className="block text-xs font-medium text-stone-600 mb-1">Estado del reloj *</label>
             <select name="estado" required defaultValue={reloj?.estado ?? ""} className={field}>
               <option value="" disabled>Selecciona estado</option>
               {ESTADOS.map((e) => <option key={e} value={e}>{e}</option>)}
             </select>
+          </div>
+          <div className="col-span-2">
+            <label className="block text-xs font-medium text-stone-600 mb-1">Estado de venta *</label>
+            <div className="flex flex-wrap gap-2">
+              {ESTADOS_VENTA.map((e) => (
+                <label key={e} className="flex items-center gap-2 text-sm px-3 py-2 border border-stone-200 rounded-xl cursor-pointer has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
+                  <input
+                    type="radio"
+                    name="estado_venta"
+                    value={e}
+                    defaultChecked={(reloj?.estado_venta ?? "Disponible") === e}
+                    className="accent-amber-500"
+                  />
+                  <span>
+                    {e === "Disponible" && "🟢"}
+                    {e === "Reservado" && "🟡"}
+                    {e === "Vendido" && "⚫"}
+                    {" "}{e}
+                  </span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
         <h2 className="font-semibold text-stone-800">Documentación</h2>
-        <div className="flex gap-6">
+        <div className="flex gap-6 flex-wrap">
           {[
             { name: "caja", label: "Caja original", checked: reloj?.caja },
             { name: "papeles", label: "Papeles / Garantía", checked: reloj?.papeles },
@@ -119,10 +142,18 @@ export default function RelojForm({ reloj, action }: Props) {
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
         <h2 className="font-semibold text-stone-800">Imágenes</h2>
-        <p className="text-xs text-stone-500">Una URL por línea. Mínimo recomendado: 12 ángulos.</p>
-        <textarea name="imagenes" rows={6} defaultValue={reloj?.imagenes?.join("\n") ?? ""}
-          className={`${field} font-mono text-xs`}
-          placeholder={"https://...\nhttps://...\nhttps://..."} />
+        <p className="text-xs text-stone-500">
+          Subida desde galería (móvil), cámara, ordenador o Google Drive. Acepta HEIC/HEIF (iPhone).
+          Arrastra para reordenar. Mínimo recomendado: 6-12 ángulos.
+        </p>
+        <ImageUploader
+          bucket="relojes"
+          folder="catalogo"
+          name="imagenes"
+          defaultUrls={reloj?.imagenes ?? []}
+          multiple
+          helpText="La primera imagen es la principal (portada en el catálogo)."
+        />
       </div>
 
       <div className="bg-white rounded-2xl border border-stone-200 p-6">

@@ -15,6 +15,12 @@ const ESTADO_BADGE: Record<string, string> = {
   "En condiciones aceptables": "bg-stone-100 text-stone-600",
 };
 
+const ESTADO_VENTA_STYLE: Record<string, string> = {
+  Disponible: "bg-emerald-600 text-white",
+  Reservado: "bg-amber-500 text-black",
+  Vendido: "bg-stone-900 text-white",
+};
+
 export default async function RelojPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const reloj = await getRelojBySlug(slug);
@@ -52,7 +58,14 @@ export default async function RelojPage({ params }: { params: Promise<{ slug: st
             Ref. {reloj.referencia}{reloj.año ? ` · ${reloj.año}` : ""}
           </p>
 
-          <p className="text-4xl font-bold text-stone-900 mb-8">{formatPrecio(reloj.precio_venta)}</p>
+          <div className="flex items-baseline gap-3 mb-8">
+            <p className={`text-4xl font-bold ${reloj.estado_venta === "Vendido" ? "text-stone-400 line-through" : "text-stone-900"}`}>
+              {formatPrecio(reloj.precio_venta)}
+            </p>
+            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${ESTADO_VENTA_STYLE[reloj.estado_venta ?? "Disponible"] ?? "bg-stone-700 text-white"}`}>
+              {reloj.estado_venta ?? "Disponible"}
+            </span>
+          </div>
 
           <div className="flex flex-wrap gap-2 mb-8">
             <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${ESTADO_BADGE[reloj.estado] ?? "bg-stone-100 text-stone-600"}`}>
@@ -68,10 +81,16 @@ export default async function RelojPage({ params }: { params: Promise<{ slug: st
           )}
 
           <div className="flex flex-col gap-3">
-            <a href={`mailto:hola@eligetutiempo.com?subject=Interés en ${reloj.marca} ${reloj.modelo} (${reloj.referencia})`}
-              className="bg-amber-600 hover:bg-amber-500 text-white text-center py-4 rounded-xl font-semibold text-lg transition-colors">
-              Estoy interesado
-            </a>
+            {reloj.estado_venta === "Vendido" ? (
+              <div className="bg-stone-100 border border-stone-200 text-stone-600 text-center py-4 rounded-xl font-semibold">
+                Esta pieza ya ha sido vendida
+              </div>
+            ) : (
+              <a href={`mailto:hola@eligetutiempo.com?subject=Interés en ${reloj.marca} ${reloj.modelo} (${reloj.referencia})`}
+                className="bg-amber-600 hover:bg-amber-500 text-white text-center py-4 rounded-xl font-semibold text-lg transition-colors">
+                {reloj.estado_venta === "Reservado" ? "Entrar en lista de espera" : "Estoy interesado"}
+              </a>
+            )}
             <Link href="/tasacion"
               className="border border-stone-300 hover:border-amber-400 text-stone-700 text-center py-4 rounded-xl font-semibold transition-colors">
               Tasar mi reloj

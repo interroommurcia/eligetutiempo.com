@@ -1,0 +1,125 @@
+// Lista maestra de marcas para autocompletado al añadir reloj.
+// Al escribir en MarcaInput el usuario ve coincidencias de aquí; puede
+// aceptar una o guardar una nueva (el campo es libre).
+export const MARCAS_RELOJES: string[] = [
+  "A. Lange & Söhne",
+  "Alpina",
+  "Angelus",
+  "Anonimo",
+  "Apple",
+  "Audemars Piguet",
+  "Baume & Mercier",
+  "Bell & Ross",
+  "Blancpain",
+  "Breguet",
+  "Breitling",
+  "Bremont",
+  "Bulgari",
+  "Bulova",
+  "Carl F. Bucherer",
+  "Cartier",
+  "Casio",
+  "Certina",
+  "Chanel",
+  "Chopard",
+  "Christopher Ward",
+  "Chronoswiss",
+  "Citizen",
+  "Corum",
+  "Czapek",
+  "Damasko",
+  "De Bethune",
+  "Doxa",
+  "Eberhard & Co.",
+  "Ebel",
+  "Eterna",
+  "F.P. Journe",
+  "Favre-Leuba",
+  "Fortis",
+  "Frédérique Constant",
+  "Franck Muller",
+  "Garmin",
+  "Girard-Perregaux",
+  "Glashütte Original",
+  "Glycine",
+  "Grand Seiko",
+  "Greubel Forsey",
+  "H. Moser & Cie",
+  "Hamilton",
+  "Hermès",
+  "Hublot",
+  "Hugo Boss",
+  "Invicta",
+  "IWC",
+  "Jaeger-LeCoultre",
+  "Jaquet Droz",
+  "Junghans",
+  "Kurono Tokyo",
+  "Longines",
+  "Louis Erard",
+  "Louis Moinet",
+  "Louis Vuitton",
+  "Maurice Lacroix",
+  "Meistersinger",
+  "Michel Herbelin",
+  "Mido",
+  "Minerva",
+  "Montblanc",
+  "Movado",
+  "Nomos Glashütte",
+  "Omega",
+  "Oris",
+  "Panerai",
+  "Parmigiani Fleurier",
+  "Patek Philippe",
+  "Perrelet",
+  "Piaget",
+  "Porsche Design",
+  "Rado",
+  "Raymond Weil",
+  "Richard Mille",
+  "Roger Dubuis",
+  "Rolex",
+  "Sarpaneva",
+  "Seiko",
+  "Sinn",
+  "Snyper",
+  "Speake-Marin",
+  "Squale",
+  "Steinhart",
+  "Stowa",
+  "Suunto",
+  "Swatch",
+  "TAG Heuer",
+  "Timex",
+  "Tissot",
+  "Tudor",
+  "Ulysse Nardin",
+  "Union Glashütte",
+  "Universal Genève",
+  "Vacheron Constantin",
+  "Van Cleef & Arpels",
+  "Vulcain",
+  "Wempe",
+  "Zenith",
+  "Zodiac",
+];
+
+/** Devuelve las marcas que empiezan por el prefijo (case-insensitive, con acentos normalizados). */
+export function sugerirMarcas(prefix: string, limit = 8): string[] {
+  const q = normalizar(prefix.trim());
+  if (!q) return [];
+  const starts: string[] = [];
+  const includes: string[] = [];
+  for (const m of MARCAS_RELOJES) {
+    const n = normalizar(m);
+    if (n.startsWith(q)) starts.push(m);
+    else if (n.includes(q)) includes.push(m);
+    if (starts.length >= limit) break;
+  }
+  return [...starts, ...includes].slice(0, limit);
+}
+
+function normalizar(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}

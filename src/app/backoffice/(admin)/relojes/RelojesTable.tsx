@@ -1,8 +1,8 @@
 "use client";
 
 import { useTransition } from "react";
-import type { Reloj } from "@/lib/relojes";
-import { eliminarReloj, togglePublicado } from "./actions";
+import type { Reloj, EstadoVenta } from "@/lib/relojes";
+import { eliminarReloj, togglePublicado, cambiarEstadoVenta } from "./actions";
 
 const ESTADO_COLOR: Record<string, string> = {
   "Nuevo con etiquetas": "bg-emerald-100 text-emerald-700",
@@ -10,6 +10,32 @@ const ESTADO_COLOR: Record<string, string> = {
   "Muy buen estado": "bg-amber-100 text-amber-700",
   "En condiciones aceptables": "bg-stone-100 text-stone-600",
 };
+
+const ESTADO_VENTA_COLOR: Record<EstadoVenta, string> = {
+  Disponible: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Reservado: "bg-amber-50 text-amber-800 border-amber-200",
+  Vendido: "bg-stone-100 text-stone-700 border-stone-300",
+};
+
+function EstadoVentaSelect({ reloj }: { reloj: Reloj }) {
+  const [pending, startTransition] = useTransition();
+  const current = (reloj.estado_venta ?? "Disponible") as EstadoVenta;
+  return (
+    <select
+      disabled={pending}
+      value={current}
+      onChange={(e) => {
+        const v = e.target.value as EstadoVenta;
+        startTransition(() => cambiarEstadoVenta(reloj.id, v));
+      }}
+      className={`text-xs font-medium rounded-lg border px-2 py-1 ${ESTADO_VENTA_COLOR[current]} focus:outline-none focus:ring-2 focus:ring-amber-400`}
+    >
+      <option value="Disponible">🟢 Disponible</option>
+      <option value="Reservado">🟡 Reservado</option>
+      <option value="Vendido">⚫ Vendido</option>
+    </select>
+  );
+}
 
 function RowActions({ reloj }: { reloj: Reloj }) {
   const [pending, startTransition] = useTransition();
@@ -66,7 +92,8 @@ export default function RelojesTable({ relojes }: { relojes: Reloj[] }) {
           <tr>
             <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Reloj</th>
             <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Ref.</th>
-            <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Estado</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Condición</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Venta</th>
             <th className="text-right px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">P. Venta</th>
             <th className="text-right px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Margen</th>
             <th className="px-4 py-3"></th>
@@ -88,6 +115,9 @@ export default function RelojesTable({ relojes }: { relojes: Reloj[] }) {
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ESTADO_COLOR[r.estado] ?? "bg-stone-100 text-stone-600"}`}>
                     {r.estado}
                   </span>
+                </td>
+                <td className="px-4 py-3">
+                  <EstadoVentaSelect reloj={r} />
                 </td>
                 <td className="px-4 py-3 text-right font-semibold text-stone-900">
                   {r.precio_venta.toLocaleString("es-ES")} €

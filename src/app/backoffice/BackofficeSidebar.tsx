@@ -9,7 +9,9 @@ const nav = [
   { href: "/backoffice/relojes", label: "Relojes", icon: "⌚" },
   { href: "/backoffice/tasaciones", label: "Valoraciones", icon: "📋" },
   { href: "/backoffice/ventas", label: "Ventas", icon: "💶" },
-  { href: "/backoffice/mercado", label: "Mercado", icon: "📈" },
+  { href: "/backoffice/blog", label: "Blog / Artículos", icon: "📝" },
+  { href: "/backoffice/analytics", label: "Analytics", icon: "📈" },
+  { href: "/backoffice/mercado", label: "Mercado", icon: "🔎" },
 ];
 
 export default function BackofficeSidebar() {
