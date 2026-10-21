@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { logAudit } from "@/lib/audit";
 
 const ESTADOS_VALIDOS = [
@@ -96,39 +95,73 @@ export async function cambiarEstadoVenta(id: string, estado_venta: "Disponible" 
   revalidatePath("/catalogo");
 }
 
-export async function crearReloj(formData: FormData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("No autorizado.");
+export type RelojActionResult = { ok: true; redirect?: string } | { ok: false; error: string };
 
-  const payload = parseForm(formData);
-  const { data, error } = await supabase.from("relojes").insert(payload).select("id").single();
-  if (error) throw new Error(error.message);
+/**
+ * En Next.js 16 cualquier throw desde un server action se enmascara en
+ * producción como "An error occurred in the Server Components render.
+ * The specific message is omitted...". Para enseñar al usuario el error
+ * de validación / de Postgres, devolvemos un objeto en vez de lanzar.
+ */
+export async function crearReloj(formData: FormData): Promise<RelojActionResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { ok: false, error: "No autorizado." };
 
-  await logAudit({ action: "reloj.create", resource_type: "reloj", resource_id: data?.id, metadata: { marca: payload.marca, modelo: payload.modelo } });
+    const payload = parseForm(formData);
+    const { data, error } = await supabase.from("relojes").insert(payload).select("id").single();
+    if (error) return { ok: false, error: humanize(error.message) };
 
-  revalidatePath("/backoffice/relojes");
-  revalidatePath("/catalogo");
-  redirect("/backoffice/relojes");
+    await logAudit({ action: "reloj.create", resource_type: "reloj", resource_id: data?.id, metadata: { marca: payload.marca, modelo: payload.modelo } });
+
+    revalidatePath("/backoffice/relojes");
+    revalidatePath("/catalogo");
+    return { ok: true, redirect: "/backoffice/relojes" };
+  } catch (e: unknown) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado al guardar." };
+  }
 }
 
-export async function actualizarReloj(id: string, formData: FormData) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("No autorizado.");
+export async function actualizarReloj(id: string, formData: FormData): Promise<RelojActionResult> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { ok: false, error: "No autorizado." };
 
-  const payload = parseForm(formData);
-  const { error } = await supabase
-    .from("relojes")
-    .update({ ...payload, updated_at: new Date().toISOString() })
-    .eq("id", id);
-  if (error) throw new Error(error.message);
+    const payload = parseForm(formData);
+    const { error } = await supabase
+      .from("relojes")
+      .update({ ...payload, updated_at: new Date().toISOString() })
+      .eq("id", id);
+    if (error) return { ok: false, error: humanize(error.message) };
 
-  await logAudit({ action: "reloj.update", resource_type: "reloj", resource_id: id, metadata: { marca: payload.marca, modelo: payload.modelo } });
+    await logAudit({ action: "reloj.update", resource_type: "reloj", resource_id: id, metadata: { marca: payload.marca, modelo: payload.modelo } });
 
-  revalidatePath("/backoffice/relojes");
-  revalidatePath("/catalogo");
-  redirect("/backoffice/relojes");
+    revalidatePath("/backoffice/relojes");
+    revalidatePath("/catalogo");
+    return { ok: true, redirect: "/backoffice/relojes" };
+  } catch (e: unknown) {
+    return { ok: false, error: e instanceof Error ? e.message : "Error inesperado al guardar." };
+  }
+}
+
+/** Traduce errores crudos de Postgres a algo que un humano entienda. */
+function humanize(msg: string): string {
+  if (/relojes_estado_check/i.test(msg)) {
+    return "El estado del reloj no coincide con los permitidos por la base de datos. Ejecuta la migración migrations/005_fix_estado_check.sql en Supabase.";
+  }
+  if (/relojes_estado_venta_check/i.test(msg)) {
+    return "El estado de venta debe ser Disponible, Reservado o Vendido.";
+  }
+  if (/duplicate key.*slug/i.test(msg)) {
+    return "Ya existe un reloj con la misma combinación marca-modelo-referencia (slug duplicado).";
+  }
+  if (/null value in column "([^"]+)"/i.test(msg)) {
+    const col = /null value in column "([^"]+)"/i.exec(msg)?.[1];
+    return `Falta rellenar el campo "${col}".`;
+  }
+  return msg;
 }
 
 export async function eliminarReloj(id: string) {

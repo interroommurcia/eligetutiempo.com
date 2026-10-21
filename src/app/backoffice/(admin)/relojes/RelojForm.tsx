@@ -1,37 +1,46 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Reloj } from "@/lib/relojes";
 import MarcaInput from "@/components/MarcaInput";
 import ImageUploader from "@/components/ImageUploader";
+import type { RelojActionResult } from "./actions";
 
 const ESTADOS = ["Nuevo con etiquetas", "Como nuevo", "Muy buen estado", "En condiciones aceptables"] as const;
 const ESTADOS_VENTA = ["Disponible", "Reservado", "Vendido"] as const;
 
 type Props = {
   reloj?: Reloj;
-  action: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<RelojActionResult>;
 };
 
 export default function RelojForm({ reloj, action }: Props) {
-  const [error, formAction, pending] = useActionState(
-    async (_prev: string | null, formData: FormData) => {
-      try {
-        await action(formData);
-        return null;
-      } catch (e: unknown) {
-        return e instanceof Error ? e.message : "Error al guardar";
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setError(null);
+    startTransition(async () => {
+      const result = await action(formData);
+      if (result.ok) {
+        if (result.redirect) router.push(result.redirect);
+        router.refresh();
+      } else {
+        setError(result.error);
       }
-    },
-    null
-  );
+    });
+  }
 
   const field = "block w-full rounded-xl border border-stone-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400";
 
   return (
-    <form action={formAction} className="space-y-6 max-w-2xl">
+    <form onSubmit={onSubmit} className="space-y-6 max-w-2xl">
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 whitespace-pre-line">
           {error}
         </div>
       )}
