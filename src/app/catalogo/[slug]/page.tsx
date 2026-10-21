@@ -1,6 +1,7 @@
 import { getRelojBySlug } from "@/lib/relojes";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import BotonInteresado from "@/components/BotonInteresado";
 
 export const dynamic = "force-dynamic";
 
@@ -81,16 +82,14 @@ export default async function RelojPage({ params }: { params: Promise<{ slug: st
           )}
 
           <div className="flex flex-col gap-3">
-            {reloj.estado_venta === "Vendido" ? (
-              <div className="bg-stone-100 border border-stone-200 text-stone-600 text-center py-4 rounded-xl font-semibold">
-                Esta pieza ya ha sido vendida
-              </div>
-            ) : (
-              <a href={`mailto:hola@eligetutiempo.com?subject=Interés en ${reloj.marca} ${reloj.modelo} (${reloj.referencia})`}
-                className="bg-amber-600 hover:bg-amber-500 text-white text-center py-4 rounded-xl font-semibold text-lg transition-colors">
-                {reloj.estado_venta === "Reservado" ? "Entrar en lista de espera" : "Estoy interesado"}
-              </a>
-            )}
+            <BotonInteresado
+              marca={reloj.marca}
+              modelo={reloj.modelo}
+              referencia={reloj.referencia}
+              precio={reloj.precio_venta}
+              disabled={reloj.estado_venta === "Vendido"}
+              label={reloj.estado_venta === "Reservado" ? "Entrar en lista de espera" : "Estoy interesado"}
+            />
             <Link href="/tasacion"
               className="border border-stone-300 hover:border-amber-400 text-stone-700 text-center py-4 rounded-xl font-semibold transition-colors">
               Tasar mi reloj
