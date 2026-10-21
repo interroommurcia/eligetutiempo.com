@@ -66,7 +66,7 @@ export default function RelojForm({ reloj, action }: Props) {
           <div>
             <label className="block text-xs font-medium text-stone-600 mb-1">Estado del reloj *</label>
             <select name="estado" required defaultValue={reloj?.estado ?? ""} className={field}>
-              <option value="" disabled>Selecciona estado</option>
+              <option value="">— Selecciona estado —</option>
               {ESTADOS.map((e) => <option key={e} value={e}>{e}</option>)}
             </select>
           </div>

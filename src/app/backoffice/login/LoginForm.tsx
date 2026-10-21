@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { registrarLogin } from "./actions";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -20,11 +21,15 @@ export default function LoginForm() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
+      // Registramos el intento fallido (sin bloquear la UI si falla el log).
+      registrarLogin(email, false).catch(() => {});
       setError("Email o contraseña incorrectos");
       setLoading(false);
       return;
     }
 
+    // Registramos el login OK antes de redirigir.
+    try { await registrarLogin(email, true); } catch {}
     router.push("/backoffice");
     router.refresh();
   }

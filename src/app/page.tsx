@@ -1,9 +1,16 @@
 import Link from "next/link";
-import { relojesDestacados } from "@/lib/data";
+import { getRelojesPublicados } from "@/lib/relojes";
 import RelojCard from "@/components/RelojCard";
 import ScrollReveal from "@/components/ScrollReveal";
 
-export default function Home() {
+// Caché corta: homepage se regenera cada 60s en vez de en cada visita.
+export const revalidate = 60;
+
+export default async function Home() {
+  const todos = await getRelojesPublicados().catch(() => []);
+  const destacados = todos
+    .filter((r) => (r.estado_venta ?? "Disponible") !== "Vendido")
+    .slice(0, 6);
   return (
     <>
       {/* ── Hero ── */}
@@ -84,13 +91,35 @@ export default function Home() {
               </Link>
             </div>
           </ScrollReveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {relojesDestacados.map((reloj, i) => (
-              <ScrollReveal key={reloj.id} delay={((i % 3) * 200) as 0|100|200|300|400|500|600}>
-                <RelojCard reloj={reloj} />
-              </ScrollReveal>
-            ))}
-          </div>
+          {destacados.length === 0 ? (
+            <p className="text-stone-500 text-center py-10">
+              Pronto publicaremos nuestras primeras piezas. Mientras tanto, puedes <Link href="/tasacion" className="text-[#C9A84C] hover:underline">valorar tu reloj</Link>.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {destacados.map((r, i) => (
+                <ScrollReveal key={r.id} delay={((i % 3) * 200) as 0|100|200|300|400|500|600}>
+                  <RelojCard
+                    reloj={{
+                      id: r.id,
+                      marca: r.marca,
+                      modelo: r.modelo,
+                      referencia: r.referencia,
+                      precio: r.precio_venta,
+                      año: r.año ?? 0,
+                      estado: r.estado,
+                      estado_venta: r.estado_venta ?? "Disponible",
+                      caja: r.caja,
+                      papeles: r.papeles,
+                      imagen: r.imagenes?.[0] ?? "",
+                      slug: r.slug,
+                      descripcion: r.descripcion ?? "",
+                    }}
+                  />
+                </ScrollReveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

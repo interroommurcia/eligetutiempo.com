@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { enviarTasacion } from "./actions";
+import HoneypotFields from "@/components/HoneypotFields";
 
 type Foto = { file: File; preview: string; url: string | null; uploading: boolean };
 type State = { ok: boolean; error?: string } | null;
@@ -84,6 +85,7 @@ export default function TasacionForm() {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <HoneypotFields />
       {state?.error && (
         <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
           {state.error}

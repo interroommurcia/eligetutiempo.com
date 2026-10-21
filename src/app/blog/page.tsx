@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getPostsPublicados } from "@/lib/blog";
 
-export const dynamic = "force-dynamic";
+// Caché corta: regenera cada 2 min, se invalida al publicar/editar.
+export const revalidate = 120;
 export const metadata = {
   title: "Blog — EligeTuTiempo",
   description: "Artículos sobre relojería, mercado, mantenimiento y colecciones.",

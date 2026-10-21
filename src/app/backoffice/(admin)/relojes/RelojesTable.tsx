@@ -86,8 +86,8 @@ export default function RelojesTable({ relojes }: { relojes: Reloj[] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="bg-white rounded-2xl border border-stone-200 overflow-x-auto">
+      <table className="w-full text-sm min-w-[720px]">
         <thead className="bg-stone-50 border-b border-stone-200">
           <tr>
             <th className="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Reloj</th>

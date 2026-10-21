@@ -2,7 +2,8 @@ import { getRelojesPublicados } from "@/lib/relojes";
 import RelojCard from "@/components/RelojCard";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+// Caché corta: regenera el catálogo cada 60s, se invalida al publicar/editar.
+export const revalidate = 60;
 export const metadata = { title: "Catálogo de Relojes — EligeTuTiempo" };
 
 const ESTADOS_VENTA = ["Disponible", "Reservado", "Vendido"] as const;

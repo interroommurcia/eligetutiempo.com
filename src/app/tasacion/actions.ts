@@ -2,8 +2,18 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { isLikelyBot } from "@/lib/antibot";
+import { logAudit } from "@/lib/audit";
 
 export async function enviarTasacion(formData: FormData) {
+  // Antibot: honeypot + mínimo 1.5s rellenando. Si parece bot, respondemos OK
+  // para no dar pistas, pero no insertamos nada.
+  const bot = isLikelyBot(formData);
+  if (bot.bot) {
+    await logAudit({ action: "antibot.blocked", resource_type: "tasacion", metadata: { reason: bot.reason } });
+    return;
+  }
+
   const supabase = await createClient();
 
   const { error } = await supabase.from("tasaciones").insert({
