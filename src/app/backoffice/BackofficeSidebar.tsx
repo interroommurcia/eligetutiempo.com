@@ -12,6 +12,7 @@ const nav = [
   { href: "/backoffice/ventas", label: "Ventas", icon: "💶" },
   { href: "/backoffice/blog", label: "Blog / Artículos", icon: "📝" },
   { href: "/backoffice/analytics", label: "Analytics", icon: "📈" },
+  { href: "/backoffice/usuarios", label: "Usuarios", icon: "👥" },
   { href: "/backoffice/seguridad", label: "Seguridad", icon: "🔒" },
   { href: "/backoffice/mercado", label: "Mercado", icon: "🔎" },
 ];
